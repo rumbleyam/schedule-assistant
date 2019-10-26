@@ -35,18 +35,17 @@ const weekdayToISO = {
 
 function findNextOccurrenceOfWeekday(start, weekday) {
   const ISOValue = weekdayToISO[weekday];
-  if(start.weekday() > ISOValue) {
-    return start.clone().add(1, 'week').day(ISOValue);
+  if (start.weekday() > ISOValue) {
+    return start
+      .clone()
+      .add(1, 'week')
+      .day(ISOValue);
   } else {
     return start.clone().day(ISOValue);
   }
 }
 
-export default function Schedule({
-  selectedDate,
-  weekdays,
-  occurrences,
-}) {
+export default function Schedule({ selectedDate, weekdays, occurrences }) {
   const classes = useStyles();
 
   const weekdaysToSchedule = [];
@@ -84,7 +83,8 @@ export default function Schedule({
       // Start with the selected date
       schedule.push(selectedDate);
     } else {
-      const weekday = weekdaysToSchedule[(startingPosition + ii) % weekdaysToSchedule.length];
+      const weekday =
+        weekdaysToSchedule[(startingPosition + ii) % weekdaysToSchedule.length];
       if (ii === 0) {
         // Use the next occurrence of the week day, after the selected date
         // schedule.push(selectedDate.calendar())
@@ -101,7 +101,12 @@ export default function Schedule({
         Schedule
       </Typography>
       <Typography variant="body1" align="left">
-        {schedule.map((day, index) => (<>{day.format('dddd, M/D h:mm A')}<br /></>))}
+        {schedule.map((day, index) => (
+          <>
+            {day.format('dddd, M/D h:mm A')}
+            <br />
+          </>
+        ))}
       </Typography>
     </Box>
   );

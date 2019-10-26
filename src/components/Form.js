@@ -6,10 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {
-  KeyboardDatePicker,
-  KeyboardTimePicker,
-} from '@material-ui/pickers';
+import { KeyboardDatePicker, KeyboardTimePicker } from '@material-ui/pickers';
 
 const useStyles = makeStyles(theme => ({
   inputContainer: {
@@ -27,7 +24,7 @@ export default function Form({
   weekdays,
   handleWeekdaysChange,
   occurrences,
-  handleOccurrenceChange
+  handleOccurrenceChange,
 }) {
   const classes = useStyles();
   return (
@@ -60,43 +57,78 @@ export default function Form({
       <FormGroup>
         <FormControlLabel
           control={
-            <Checkbox checked={weekdays.sunday} onChange={handleWeekdaysChange('sunday')} value="true" color="primary"/>
+            <Checkbox
+              checked={weekdays.sunday}
+              onChange={handleWeekdaysChange('sunday')}
+              value="true"
+              color="primary"
+            />
           }
           label="Sunday"
         />
         <FormControlLabel
           control={
-            <Checkbox checked={weekdays.monday} onChange={handleWeekdaysChange('monday')} value="true" color="primary"/>
+            <Checkbox
+              checked={weekdays.monday}
+              onChange={handleWeekdaysChange('monday')}
+              value="true"
+              color="primary"
+            />
           }
           label="Monday"
         />
         <FormControlLabel
           control={
-            <Checkbox checked={weekdays.tuesday} onChange={handleWeekdaysChange('tuesday')} value="true" color="primary"/>
+            <Checkbox
+              checked={weekdays.tuesday}
+              onChange={handleWeekdaysChange('tuesday')}
+              value="true"
+              color="primary"
+            />
           }
           label="Tuesday"
         />
         <FormControlLabel
           control={
-            <Checkbox checked={weekdays.wednesday} onChange={handleWeekdaysChange('wednesday')} value="true" color="primary"/>
+            <Checkbox
+              checked={weekdays.wednesday}
+              onChange={handleWeekdaysChange('wednesday')}
+              value="true"
+              color="primary"
+            />
           }
           label="Wednesday"
         />
         <FormControlLabel
           control={
-            <Checkbox checked={weekdays.thursday} onChange={handleWeekdaysChange('thursday')} value="true" color="primary"/>
+            <Checkbox
+              checked={weekdays.thursday}
+              onChange={handleWeekdaysChange('thursday')}
+              value="true"
+              color="primary"
+            />
           }
           label="Thursday"
         />
         <FormControlLabel
           control={
-            <Checkbox checked={weekdays.friday} onChange={handleWeekdaysChange('friday')} value="true" color="primary"/>
+            <Checkbox
+              checked={weekdays.friday}
+              onChange={handleWeekdaysChange('friday')}
+              value="true"
+              color="primary"
+            />
           }
           label="Friday"
         />
         <FormControlLabel
           control={
-            <Checkbox checked={weekdays.saturday} onChange={handleWeekdaysChange('saturday')} value="true" color="primary"/>
+            <Checkbox
+              checked={weekdays.saturday}
+              onChange={handleWeekdaysChange('saturday')}
+              value="true"
+              color="primary"
+            />
           }
           label="Saturday"
         />

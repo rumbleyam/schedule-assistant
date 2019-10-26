@@ -9,9 +9,7 @@ import CalendarIcon from '@material-ui/icons/CalendarToday';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { deepPurple, blueGrey } from '@material-ui/core/colors';
-import {
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -19,7 +17,6 @@ import Form from './components/Form';
 import Schedule from './components/Schedule';
 
 const moment = new MomentUtils();
-
 
 const theme = createMuiTheme({
   palette: {
@@ -50,7 +47,12 @@ const useStyles = makeStyles(theme => ({
 export default function ButtonAppBar() {
   const classes = useStyles();
 
-  const [selectedDate, setSelectedDate] = React.useState(moment.date().set('h', 8).set('m', 0));
+  const [selectedDate, setSelectedDate] = React.useState(
+    moment
+      .date()
+      .set('h', 8)
+      .set('m', 0),
+  );
   const [weekdays, setWeekdays] = React.useState({
     sunday: false,
     monday: false,
@@ -68,7 +70,6 @@ export default function ButtonAppBar() {
 
   const handleDateChange = date => {
     setSelectedDate(date);
-    
   };
 
   const handleOccurrenceChange = event => {
@@ -88,7 +89,11 @@ export default function ButtonAppBar() {
               <Typography variant="h6" className={classes.title}>
                 Schedule Assistant
               </Typography>
-              <IconButton edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
+              <IconButton
+                edge="end"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="menu">
                 <SettingsIcon />
               </IconButton>
             </Toolbar>
