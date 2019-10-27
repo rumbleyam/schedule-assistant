@@ -72,6 +72,26 @@ export default function ButtonAppBar() {
     friday: true,
     saturday: false,
   });
+  const [closedHolidays, setClosedHolidays] = React.useState({
+    "New Year's Day": true,
+    'Martin Luther King Jr. Day': false,
+    "Valentine's Day": false,
+    "Washington's Birthday": false,
+    'Tax Day': false,
+    'Administrative Professionals Day': false,
+    'Memorial Day': true,
+    'Independence Day': true,
+    'Independence Day (substitute day)': false,
+    'Labor Day': true,
+    'Columbus Day': false,
+    'Election Day': false,
+    'Veterans Day': false,
+    'Thanksgiving Day': true,
+    'Day after Thanksgiving Day': true,
+    'Christmas Eve': false,
+    'Christmas Day': true,
+    "New Year's Eve": false,
+  });
   const [occurrences, setOccurrences] = React.useState(1);
   const [settingsOpen, setSettingsOpen] = React.useState(false);
 
@@ -81,6 +101,10 @@ export default function ButtonAppBar() {
       setWeekdays({ ...weekdays, [name]: value });
     }
     setOpenWeekdays({ ...openWeekdays, [name]: value });
+  };
+
+  const handleClosedHolidaysChange = name => event => {
+    setClosedHolidays({ ...closedHolidays, [name]: event.target.checked });
   };
 
   const handleWeekdaysChange = name => event => {
@@ -156,6 +180,7 @@ export default function ButtonAppBar() {
                 <Schedule
                   selectedDate={selectedDate}
                   weekdays={weekdays}
+                  closedHolidays={closedHolidays}
                   occurrences={occurrences}
                 />
               </Grid>
@@ -166,6 +191,8 @@ export default function ButtonAppBar() {
             handleClose={() => setSettingsOpen(false)}
             weekdays={openWeekdays}
             handleWeekdaysChange={handleOpenWeekdaysChange}
+            closedHolidays={closedHolidays}
+            handleClosedHolidaysChange={handleClosedHolidaysChange}
           />
         </MuiPickersUtilsProvider>
       </ThemeProvider>

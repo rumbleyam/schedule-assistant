@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import Holidays from 'date-holidays';
+
+const hd = new Holidays();
+hd.init('US');
 
 const useStyles = makeStyles(theme => ({
   inputContainer: {
@@ -10,6 +14,13 @@ const useStyles = makeStyles(theme => ({
   caption: {
     marginLeft: 0,
     marginTop: theme.spacing(2),
+  },
+  closed: {
+    color: 'red',
+    textDecoration: 'line-through',
+  },
+  holiday: {
+    fontWeight: 'bold',
   },
 }));
 
@@ -35,7 +46,7 @@ const weekdayToISO = {
 
 function findNextOccurrenceOfWeekday(start, weekday) {
   const ISOValue = weekdayToISO[weekday];
-  if (start.weekday() > ISOValue) {
+  if (start.weekday() >= ISOValue) {
     return start
       .clone()
       .add(1, 'week')
@@ -45,7 +56,19 @@ function findNextOccurrenceOfWeekday(start, weekday) {
   }
 }
 
-export default function Schedule({ selectedDate, weekdays, occurrences }) {
+function isHoliday(moment, closedHolidays) {
+  const holiday = hd.isHoliday(moment.toDate());
+  if (holiday && closedHolidays[holiday.name]) {
+    return holiday.name;
+  }
+}
+
+export default function Schedule({
+  selectedDate,
+  weekdays,
+  occurrences,
+  closedHolidays,
+}) {
   const classes = useStyles();
 
   const weekdaysToSchedule = [];
@@ -76,23 +99,32 @@ export default function Schedule({ selectedDate, weekdays, occurrences }) {
 
   const firstDay = ISOToWeekday[selectedDate.format('E')];
   const firstDayPosition = weekdaysToSchedule.indexOf(firstDay);
+  let daysToBook = occurrences;
 
   const schedule = [];
-  for (let ii = 0; ii < occurrences; ii++) {
+  for (let ii = 0; ii < daysToBook; ii++) {
+    let nextDay;
+    const weekday =
+      weekdaysToSchedule[(startingPosition + ii) % weekdaysToSchedule.length];
     if (ii === 0 && startingPosition === firstDayPosition) {
       // Start with the selected date
-      schedule.push(selectedDate);
+      nextDay = selectedDate;
+    } else if (ii === 0) {
+      nextDay = findNextOccurrenceOfWeekday(selectedDate, weekday);
     } else {
-      const weekday =
-        weekdaysToSchedule[(startingPosition + ii) % weekdaysToSchedule.length];
-      if (ii === 0) {
-        // Use the next occurrence of the week day, after the selected date
-        // schedule.push(selectedDate.calendar())
-        schedule.push(findNextOccurrenceOfWeekday(selectedDate, weekday));
-      } else {
-        // Use the next occurrence of the week day, after the last date
-        schedule.push(findNextOccurrenceOfWeekday(schedule[ii - 1], weekday));
-      }
+      nextDay = findNextOccurrenceOfWeekday(schedule[ii - 1].day, weekday);
+    }
+    const holiday = isHoliday(nextDay, closedHolidays);
+
+    schedule.push({
+      day: nextDay,
+      status: holiday ? 'closed' : 'available',
+      holiday,
+    });
+
+    if (holiday) {
+      // Add a day on the end
+      daysToBook++;
     }
   }
   return (
@@ -101,11 +133,16 @@ export default function Schedule({ selectedDate, weekdays, occurrences }) {
         Schedule
       </Typography>
       <Typography variant="body1" align="left">
-        {schedule.map((day, index) => (
-          <>
-            {day.format('dddd, M/D h:mm A')}
+        {schedule.map(({ day, status, holiday }, index) => (
+          <Fragment key={`schedule_${index}`}>
+            <span className={classes[status]}>
+              {day.format('dddd, M/D h:mm A')}
+            </span>
+            {holiday && (
+              <span className={classes.holiday}> (Closed for {holiday})</span>
+            )}
             <br />
-          </>
+          </Fragment>
         ))}
       </Typography>
     </Box>

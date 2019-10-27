@@ -69,6 +69,8 @@ export default function Settings({
   handleClose,
   weekdays,
   handleWeekdaysChange,
+  closedHolidays,
+  handleClosedHolidaysChange,
 }) {
   const classes = useStyles();
 
@@ -80,7 +82,7 @@ export default function Settings({
       TransitionComponent={Transition}
       keepMounted
       fullWidth
-      maxWidth="lg"
+      maxWidth="md"
     >
       <DialogTitle id="customized-dialog-title" onClose={handleClose}>
         Settings
@@ -174,11 +176,27 @@ export default function Settings({
             </Box>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="flex-start"
-            />
+            <Box display="flex" flexDirection="column" alignItems="flex-start">
+              <Typography variant="caption" className={classes.caption}>
+                Closed Holidays
+              </Typography>
+              <FormGroup>
+                {Object.keys(closedHolidays).map((holiday, index) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={closedHolidays[holiday]}
+                        onChange={handleClosedHolidaysChange(holiday)}
+                        value="true"
+                        color="primary"
+                      />
+                    }
+                    label={holiday}
+                    key={`holiday_${index}`}
+                  />
+                ))}
+              </FormGroup>
+            </Box>
           </Grid>
         </Grid>
       </DialogContent>
