@@ -79,6 +79,25 @@ export default function ButtonAppBar() {
     }
   };
 
+  const resetForm = () => {
+    setSelectedDate(
+      moment
+        .date()
+        .set('h', 8)
+        .set('m', 0),
+    );
+    setWeekdays({
+      sunday: false,
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: false,
+    });
+    setOccurrences('1');
+  };
+
   return (
     <div className={classes.root}>
       <ThemeProvider theme={theme}>
@@ -93,14 +112,15 @@ export default function ButtonAppBar() {
                 edge="end"
                 className={classes.menuButton}
                 color="inherit"
-                aria-label="menu">
+                aria-label="menu"
+              >
                 <SettingsIcon />
               </IconButton>
             </Toolbar>
           </AppBar>
           <Paper className={classes.paper}>
             <Grid container justify="flex-start" spacing={2}>
-              <Grid item md={3} sm={12}>
+              <Grid item md={3} xs={12}>
                 <Form
                   selectedDate={selectedDate}
                   handleDateChange={handleDateChange}
@@ -108,9 +128,10 @@ export default function ButtonAppBar() {
                   handleWeekdaysChange={handleWeekdaysChange}
                   occurrences={occurrences}
                   handleOccurrenceChange={handleOccurrenceChange}
+                  handleResetPress={resetForm}
                 />
               </Grid>
-              <Grid item md={6} sm={12}>
+              <Grid item md={6} xs={12}>
                 <Schedule
                   selectedDate={selectedDate}
                   weekdays={weekdays}
