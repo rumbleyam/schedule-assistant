@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -25,6 +26,7 @@ export default function Form({
   handleWeekdaysChange,
   occurrences,
   handleOccurrenceChange,
+  handleResetPress,
 }) {
   const classes = useStyles();
   return (
@@ -36,6 +38,7 @@ export default function Form({
         format="MM/DD/YY"
         value={selectedDate}
         onChange={handleDateChange}
+        fullWidth
         KeyboardButtonProps={{
           'aria-label': 'change date',
         }}
@@ -47,6 +50,7 @@ export default function Form({
         minutesStep={5}
         value={selectedDate}
         onChange={handleDateChange}
+        fullWidth
         KeyboardButtonProps={{
           'aria-label': 'change time',
         }}
@@ -140,11 +144,15 @@ export default function Form({
         onChange={handleOccurrenceChange}
         type="number"
         className={classes.textField}
+        fullWidth
         InputLabelProps={{
           shrink: true,
         }}
         margin="normal"
       />
+      <Button variant="contained" onClick={handleResetPress} fullWidth>
+        Reset
+      </Button>
     </Box>
   );
 }
