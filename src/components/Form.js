@@ -27,6 +27,7 @@ export default function Form({
   occurrences,
   handleOccurrenceChange,
   handleResetPress,
+  openWeekdays,
 }) {
   const classes = useStyles();
   return (
@@ -59,83 +60,97 @@ export default function Form({
         Weekdays
       </Typography>
       <FormGroup>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={weekdays.sunday}
-              onChange={handleWeekdaysChange('sunday')}
-              value="true"
-              color="primary"
-            />
-          }
-          label="Sunday"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={weekdays.monday}
-              onChange={handleWeekdaysChange('monday')}
-              value="true"
-              color="primary"
-            />
-          }
-          label="Monday"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={weekdays.tuesday}
-              onChange={handleWeekdaysChange('tuesday')}
-              value="true"
-              color="primary"
-            />
-          }
-          label="Tuesday"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={weekdays.wednesday}
-              onChange={handleWeekdaysChange('wednesday')}
-              value="true"
-              color="primary"
-            />
-          }
-          label="Wednesday"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={weekdays.thursday}
-              onChange={handleWeekdaysChange('thursday')}
-              value="true"
-              color="primary"
-            />
-          }
-          label="Thursday"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={weekdays.friday}
-              onChange={handleWeekdaysChange('friday')}
-              value="true"
-              color="primary"
-            />
-          }
-          label="Friday"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={weekdays.saturday}
-              onChange={handleWeekdaysChange('saturday')}
-              value="true"
-              color="primary"
-            />
-          }
-          label="Saturday"
-        />
+        {openWeekdays.sunday && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={weekdays.sunday}
+                onChange={handleWeekdaysChange('sunday')}
+                value="true"
+                color="primary"
+              />
+            }
+            label="Sunday"
+          />
+        )}
+        {openWeekdays.monday && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={weekdays.monday}
+                onChange={handleWeekdaysChange('monday')}
+                value="true"
+                color="primary"
+              />
+            }
+            label="Monday"
+          />
+        )}
+        {openWeekdays.tuesday && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={weekdays.tuesday}
+                onChange={handleWeekdaysChange('tuesday')}
+                value="true"
+                color="primary"
+              />
+            }
+            label="Tuesday"
+          />
+        )}
+        {openWeekdays.wednesday && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={weekdays.wednesday}
+                onChange={handleWeekdaysChange('wednesday')}
+                value="true"
+                color="primary"
+              />
+            }
+            label="Wednesday"
+          />
+        )}
+        {openWeekdays.thursday && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={weekdays.thursday}
+                onChange={handleWeekdaysChange('thursday')}
+                value="true"
+                color="primary"
+              />
+            }
+            label="Thursday"
+          />
+        )}
+        {openWeekdays.friday && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={weekdays.friday}
+                onChange={handleWeekdaysChange('friday')}
+                value="true"
+                color="primary"
+              />
+            }
+            label="Friday"
+          />
+        )}
+        {openWeekdays.saturday && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={weekdays.saturday}
+                onChange={handleWeekdaysChange('saturday')}
+                value="true"
+                color="primary"
+              />
+            }
+            label="Saturday"
+          />
+        )}
       </FormGroup>
       <TextField
         id="occurrences"

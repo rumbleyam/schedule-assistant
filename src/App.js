@@ -15,6 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Form from './components/Form';
 import Schedule from './components/Schedule';
+import Settings from './components/Settings';
 
 const moment = new MomentUtils();
 
@@ -62,7 +63,25 @@ export default function ButtonAppBar() {
     friday: false,
     saturday: false,
   });
+  const [openWeekdays, setOpenWeekdays] = React.useState({
+    sunday: false,
+    monday: true,
+    tuesday: true,
+    wednesday: true,
+    thursday: true,
+    friday: true,
+    saturday: false,
+  });
   const [occurrences, setOccurrences] = React.useState(1);
+  const [settingsOpen, setSettingsOpen] = React.useState(false);
+
+  const handleOpenWeekdaysChange = name => event => {
+    const value = event.target.checked;
+    if (!value) {
+      setWeekdays({ ...weekdays, [name]: value });
+    }
+    setOpenWeekdays({ ...openWeekdays, [name]: value });
+  };
 
   const handleWeekdaysChange = name => event => {
     setWeekdays({ ...weekdays, [name]: event.target.checked });
@@ -113,6 +132,7 @@ export default function ButtonAppBar() {
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="menu"
+                onClick={() => setSettingsOpen(true)}
               >
                 <SettingsIcon />
               </IconButton>
@@ -120,7 +140,7 @@ export default function ButtonAppBar() {
           </AppBar>
           <Paper className={classes.paper}>
             <Grid container justify="flex-start" spacing={2}>
-              <Grid item md={3} xs={12}>
+              <Grid item md={4} xs={12}>
                 <Form
                   selectedDate={selectedDate}
                   handleDateChange={handleDateChange}
@@ -129,9 +149,10 @@ export default function ButtonAppBar() {
                   occurrences={occurrences}
                   handleOccurrenceChange={handleOccurrenceChange}
                   handleResetPress={resetForm}
+                  openWeekdays={openWeekdays}
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={8} xs={12}>
                 <Schedule
                   selectedDate={selectedDate}
                   weekdays={weekdays}
@@ -140,6 +161,12 @@ export default function ButtonAppBar() {
               </Grid>
             </Grid>
           </Paper>
+          <Settings
+            open={settingsOpen}
+            handleClose={() => setSettingsOpen(false)}
+            weekdays={openWeekdays}
+            handleWeekdaysChange={handleOpenWeekdaysChange}
+          />
         </MuiPickersUtilsProvider>
       </ThemeProvider>
     </div>
