@@ -15,6 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Form from './components/Form';
 import Schedule from './components/Schedule';
+import Settings from './components/Settings';
 
 const moment = new MomentUtils();
 
@@ -62,7 +63,49 @@ export default function ButtonAppBar() {
     friday: false,
     saturday: false,
   });
+  const [openWeekdays, setOpenWeekdays] = React.useState({
+    sunday: false,
+    monday: true,
+    tuesday: true,
+    wednesday: true,
+    thursday: true,
+    friday: true,
+    saturday: false,
+  });
+  const [closedHolidays, setClosedHolidays] = React.useState({
+    "New Year's Day": true,
+    'Martin Luther King Jr. Day': false,
+    "Valentine's Day": false,
+    "Washington's Birthday": false,
+    'Tax Day': false,
+    'Administrative Professionals Day': false,
+    'Memorial Day': true,
+    'Independence Day': true,
+    'Independence Day (substitute day)': false,
+    'Labor Day': true,
+    'Columbus Day': false,
+    'Election Day': false,
+    'Veterans Day': false,
+    'Thanksgiving Day': true,
+    'Day after Thanksgiving Day': true,
+    'Christmas Eve': false,
+    'Christmas Day': true,
+    "New Year's Eve": false,
+  });
   const [occurrences, setOccurrences] = React.useState(1);
+  const [settingsOpen, setSettingsOpen] = React.useState(false);
+
+  const handleOpenWeekdaysChange = name => event => {
+    const value = event.target.checked;
+    if (!value) {
+      setWeekdays({ ...weekdays, [name]: value });
+    }
+    setOpenWeekdays({ ...openWeekdays, [name]: value });
+  };
+
+  const handleClosedHolidaysChange = name => event => {
+    setClosedHolidays({ ...closedHolidays, [name]: event.target.checked });
+  };
 
   const handleWeekdaysChange = name => event => {
     setWeekdays({ ...weekdays, [name]: event.target.checked });
@@ -113,6 +156,7 @@ export default function ButtonAppBar() {
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="menu"
+                onClick={() => setSettingsOpen(true)}
               >
                 <SettingsIcon />
               </IconButton>
@@ -120,7 +164,7 @@ export default function ButtonAppBar() {
           </AppBar>
           <Paper className={classes.paper}>
             <Grid container justify="flex-start" spacing={2}>
-              <Grid item md={3} xs={12}>
+              <Grid item md={4} xs={12}>
                 <Form
                   selectedDate={selectedDate}
                   handleDateChange={handleDateChange}
@@ -129,17 +173,27 @@ export default function ButtonAppBar() {
                   occurrences={occurrences}
                   handleOccurrenceChange={handleOccurrenceChange}
                   handleResetPress={resetForm}
+                  openWeekdays={openWeekdays}
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={8} xs={12}>
                 <Schedule
                   selectedDate={selectedDate}
                   weekdays={weekdays}
+                  closedHolidays={closedHolidays}
                   occurrences={occurrences}
                 />
               </Grid>
             </Grid>
           </Paper>
+          <Settings
+            open={settingsOpen}
+            handleClose={() => setSettingsOpen(false)}
+            weekdays={openWeekdays}
+            handleWeekdaysChange={handleOpenWeekdaysChange}
+            closedHolidays={closedHolidays}
+            handleClosedHolidaysChange={handleClosedHolidaysChange}
+          />
         </MuiPickersUtilsProvider>
       </ThemeProvider>
     </div>
