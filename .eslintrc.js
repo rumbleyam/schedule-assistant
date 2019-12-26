@@ -4,5 +4,8 @@ module.exports = {
   rules: {
     'react-native/no-inline-styles': 0,
     'no-shadow': 0,
+  },
+  env: {
+    browser: true,
   }
 };

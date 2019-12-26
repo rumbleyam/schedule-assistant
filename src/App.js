@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import SettingsIcon from '@material-ui/icons/Settings';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
+import LoginIcon from '@material-ui/icons/VpnKey';
+import LogoutIcon from '@material-ui/icons/ExitToApp';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { deepPurple, blueGrey } from '@material-ui/core/colors';
@@ -16,6 +18,9 @@ import Paper from '@material-ui/core/Paper';
 import Form from './components/Form';
 import Schedule from './components/Schedule';
 import Settings from './components/Settings';
+import Snackbar from '@material-ui/core/Snackbar';
+import LoginForm from './components/LoginForm';
+import { setToken } from './services/Backend';
 
 const moment = new MomentUtils();
 
@@ -44,6 +49,12 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
 }));
+
+const jwt = localStorage.getItem('token');
+// TODO: Confirm the jwt is valid
+if (jwt) {
+  setToken(jwt);
+}
 
 export default function ButtonAppBar() {
   const classes = useStyles();
@@ -92,8 +103,19 @@ export default function ButtonAppBar() {
     'Christmas Day': true,
     "New Year's Eve": false,
   });
+
   const [occurrences, setOccurrences] = React.useState(1);
   const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const [loginOpen, setLoginOpen] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(Boolean(jwt));
+  const [toastVisible, setToastVisible] = React.useState(false);
+  const [toastMessage, setToastMessage] = React.useState('');
+  const [organization, setOrganization] = React.useState(
+    localStorage.getItem('organization'),
+  );
+  const [username, setUsername] = React.useState(
+    localStorage.getItem('username'),
+  );
 
   const handleOpenWeekdaysChange = name => event => {
     const value = event.target.checked;
@@ -141,6 +163,19 @@ export default function ButtonAppBar() {
     setOccurrences('1');
   };
 
+  const logout = () => {
+    localStorage.setItem('organization', '');
+    localStorage.setItem('username', '');
+    localStorage.setItem('token', '');
+    setToken('');
+    setOrganization('');
+    setUsername('');
+    setIsLoggedIn(false);
+    setLoginOpen(false);
+    setToastMessage('Logged out successfully.');
+    setToastVisible(true);
+  };
+
   return (
     <div className={classes.root}>
       <ThemeProvider theme={theme}>
@@ -149,7 +184,7 @@ export default function ButtonAppBar() {
             <Toolbar>
               <CalendarIcon />
               <Typography variant="h6" className={classes.title}>
-                Schedule Assistant
+                {isLoggedIn ? organization : 'Schedule Assistant'}
               </Typography>
               <IconButton
                 edge="end"
@@ -160,6 +195,28 @@ export default function ButtonAppBar() {
               >
                 <SettingsIcon />
               </IconButton>
+              {isLoggedIn && (
+                <IconButton
+                  edge="end"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="menu"
+                  onClick={() => logout()}
+                >
+                  <LogoutIcon />
+                </IconButton>
+              )}
+              {!isLoggedIn && (
+                <IconButton
+                  edge="end"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="menu"
+                  onClick={() => setLoginOpen(true)}
+                >
+                  <LoginIcon />
+                </IconButton>
+              )}
             </Toolbar>
           </AppBar>
           <Paper className={classes.paper}>
@@ -193,6 +250,37 @@ export default function ButtonAppBar() {
             handleWeekdaysChange={handleOpenWeekdaysChange}
             closedHolidays={closedHolidays}
             handleClosedHolidaysChange={handleClosedHolidaysChange}
+          />
+          <LoginForm
+            open={loginOpen}
+            handleClose={() => setLoginOpen(false)}
+            handleLogin={({ jwt, username, organization }) => {
+              localStorage.setItem('organization', organization);
+              localStorage.setItem('username', username);
+              localStorage.setItem('token', jwt);
+              setToken(jwt);
+              setOrganization(organization);
+              setUsername(username);
+              setIsLoggedIn(true);
+              setLoginOpen(false);
+              setToastMessage('Logged in successfully.');
+              setToastVisible(true);
+            }}
+          />
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            open={toastVisible}
+            autoHideDuration={6000}
+            onClose={() => {
+              setToastVisible(false);
+            }}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{toastMessage}</span>}
           />
         </MuiPickersUtilsProvider>
       </ThemeProvider>
